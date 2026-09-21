@@ -1,0 +1,399 @@
+:root {
+  /* Paleta principal del proyecto: tonos suaves, tierra y amarillo cálido */
+  --cream: #fcfbf7;
+  --petal-1: #f8df74;
+  --petal-2: #f3c84d;
+  --petal-3: #e0a726;
+  --olive-soft: #4a7c59;
+  --brown-soft: #5a4033;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--cream);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  position: relative;
+  background: var(--cream);
+}
+
+/* ------------------------------- */
+/* Lluvia de pétalos en el fondo */
+/* ------------------------------- */
+.petals-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--cream);
+}
+
+.petal {
+  position: absolute;
+  top: -12vh;
+  display: block;
+  width: 14px;
+  height: 22px;
+  border-radius: 72% 0 72% 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), var(--petal-1) 28%, var(--petal-2) 62%, var(--petal-3) 100%);
+  box-shadow: 0 0 12px rgba(227, 182, 43, 0.18);
+  opacity: 0;
+  filter: blur(0.3px);
+  animation-name: fallPetal;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fallPetal {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(var(--sway), 50vh, 0) rotate(130deg) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(calc(var(--sway) * 1.5), 115vh, 0) rotate(340deg) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------ */
+/* Flor inicial, mensaje de guía y semilla de la escena */
+/* ------------------------------------------------ */
+.flower-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.hint {
+  margin: 0 0 6px;
+  color: var(--olive-soft);
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.7rem, 2.6vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-align: center;
+  animation: float 2.8s ease-in-out infinite;
+  text-shadow: 0 2px 10px rgba(74, 124, 89, 0.1);
+}
+
+.arrow {
+  display: block;
+  width: 45px;
+  height: 45px;
+  margin: 0 0 10px;
+  color: #ffd700;
+  animation: bounce 1.5s infinite ease-in-out;
+  filter: drop-shadow(0 2px 6px rgba(255, 215, 0, 0.15));
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.8;
+  }
+}
+
+.flower-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+}
+
+.flor-contenedor {
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 1.5s ease, opacity 1.5s ease;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.flor-contenedor.encoger {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.flower {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: flowerSpin 15s linear infinite;
+  transform-origin: center;
+}
+
+.semilla {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #5c3a2a 0%, #3d2318 32%, #1f120d 100%);
+  box-shadow: inset -2px -2px 3px rgba(255,255,255,0.08), 0 3px 6px rgba(25, 15, 10, 0.25);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  cursor: pointer;
+  transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.45s ease;
+  z-index: 3;
+}
+
+.semilla.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.semilla.caer {
+  transform: translate(-50%, 350px) scale(1);
+  transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes flowerSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.mensaje-indicador {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s ease;
+}
+
+.mensaje-indicador.ocultar {
+  opacity: 0;
+}
+
+/* --------------------------- */
+/* Suelo y crecimiento del árbol */
+/* --------------------------- */
+.linea-suelo {
+  position: absolute;
+  left: 50%;
+  bottom: 80px;
+  width: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(76, 122, 77, 0.9), rgba(94, 67, 36, 0.9), rgba(76, 122, 77, 0.9));
+  transform: translateX(-50%);
+  transition: width 2.5s ease-out;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  z-index: 1;
+}
+
+.linea-suelo.expandir-suelo {
+  width: 80vw;
+}
+
+#arbol-svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(38vw, 360px);
+  height: min(52vh, 460px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#tallo-principal {
+  stroke: #4A7C59;
+  stroke-width: 9px;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rama-secundaria {
+  stroke: #4A7C59;
+  stroke-width: 5px;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s ease-out;
+}
+
+.rama-terciaria {
+  stroke: #4A7C59;
+  stroke-width: 3px;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.1s ease-out;
+}
+
+.hoja-brote {
+  fill: #6BA87A;
+  opacity: 0;
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 5px rgba(107, 168, 122, 0.5));
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+}
+
+.hoja-brote.visible {
+  opacity: 1;
+  transform: scale(2.1);
+}
+
+#copa-corazon {
+  pointer-events: none;
+}
+
+.flor-corazon {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.flor-corazon.flor-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#contenedor-arbol {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  width: 100%;
+  max-width: 400px;
+  height: 78vh;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* --------------------------------------- */
+/* Textos románticos y mensaje final de fiesta */
+/* --------------------------------------- */
+.love-message {
+  position: absolute;
+  top: clamp(24px, 5vh, 56px);
+  left: clamp(18px, 3vw, 42px);
+  max-width: min(36vw, 420px);
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(74, 124, 89, 0.12);
+  backdrop-filter: blur(2px);
+  color: #4a7c59;
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.8rem, 2.4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: 0.04em;
+  text-shadow: 0 3px 18px rgba(74, 124, 89, 0.12);
+  box-shadow: 0 12px 28px rgba(127, 97, 52, 0.08);
+  opacity: 0;
+  transform: translateY(-14px) translateX(-8px) scale(0.96);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.love-message.visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+  animation: messageFloat 3.8s ease-in-out infinite;
+}
+
+@keyframes messageFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.celebration-message {
+  position: absolute;
+  right: clamp(18px, 3vw, 42px);
+  bottom: clamp(48px, 9vh, 90px);
+  max-width: min(30vw, 320px);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(248, 223, 116, 0.18);
+  border: 1px solid rgba(227, 182, 43, 0.18);
+  color: #b7821d;
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.45rem, 1.9vw, 2.3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 12px rgba(227, 182, 43, 0.08);
+  box-shadow: 0 10px 22px rgba(127, 97, 52, 0.06);
+  opacity: 0;
+  transform: translateY(-10px) translateX(6px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.love-message.visible + .celebration-message,
+.celebration-message.visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+  animation: celebrationFloat 3.8s ease-in-out infinite 0.5s;
+}
+
+@keyframes celebrationFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}

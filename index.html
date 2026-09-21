@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flores Amarillas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Capa de petalos que cae en el fondo para dar sensación de lluvia suave -->
+    <div class="petals-layer" id="petalsLayer" aria-hidden="true"></div>
+
+    <div class="love-message" aria-label="mensaje romántico">Te quiero, Rachel</div>
+    <div class="celebration-message" aria-label="mensaje de celebración">Feliz día de las flores amarillas</div>
+
+    <!-- Escena principal de la flor inicial y la guía de interacción -->
+    <div class="flower-wrapper" aria-label="Flor amarilla con indicación">
+      <div class="mensaje-indicador">
+        <p class="hint">Para Rachel, haz clic aquí ✨</p>
+        <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" role="img">
+          <path d="M12 3 L12 18 M5 11 L12 18 L19 11" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+
+      <div class="flower-container" aria-label="Flor amarilla">
+        <div class="flor-contenedor">
+          <img class="flower" src="flor.svg" alt="Flor amarilla" />
+        </div>
+        <div class="semilla" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Árbol generado con SVG: tallo, ramas, hojas y copa en forma de corazón -->
+    <svg id="contenedor-arbol" viewBox="0 0 400 900">
+      <!-- Tronco principal que crece con trazo animado -->
+      <path id="tallo-principal" d="M 200 880 C 50 560, 350 310, 200 200" />
+
+      <!-- Ramas laterales del árbol -->
+      <path class="rama-secundaria" d="M 160 640 C 145 615, 120 585, 98 535" />
+      <path class="rama-secundaria" d="M 235 360 C 260 330, 295 265, 320 260" />
+
+      <!-- Hojas que aparecen al crecer el árbol -->
+      <g transform="translate(94, 535) rotate(-45)">
+        <path class="hoja-brote" d="M 0 0 C 8 -10, 14 -22, 0 -34 C -14 -22, -8 -10, 0 0" />
+      </g>
+
+      <g transform="translate(325, 250) rotate(35)">
+        <path class="hoja-brote" d="M 0 0 C -8 -10, -14 -22, 0 -34 C 14 -22, 8 -10, 0 0" />
+      </g>
+
+      <!-- Grupo donde se generan dinámicamente las flores del corazón -->
+      <g id="copa-corazon" aria-hidden="true"></g>
+    </svg>
+
+    <!-- Línea del suelo que se expande cuando la semilla cae -->
+    <div class="linea-suelo" aria-hidden="true"></div>
+
+    <!-- Script principal que gestiona interacciones y animaciones -->
+    <script src="script.js"></script>
+  </body>
+</html>
