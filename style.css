@@ -221,7 +221,7 @@ body {
 .linea-suelo {
   position: absolute;
   left: 50%;
-  bottom: 32px;
+  bottom: 85px;
   width: 0;
   height: 7px;
   border-radius: 999px;

@@ -28,7 +28,7 @@ function createPasswordModal() {
 
       <form class="password-form">
         <label class="sr-only" for="secret-password">Contraseña</label>
-        <input id="secret-password" class="password-input" type="password" placeholder="Introduce una fecha especial" autocomplete="off" />
+        <input id="secret-password" class="password-input" type="password" placeholder="Una fecha especial tal vez..." autocomplete="off" />
         <button class="password-button" type="submit">Entrar</button>
       </form>
 
@@ -63,6 +63,7 @@ function createPasswordModal() {
     closeButton.textContent = '×';
     closeButton.setAttribute('aria-label', 'Cerrar');
     closeButton.style.marginBottom = '0';
+    errorText.textContent = '';
   };
 
   form.addEventListener('submit', (event) => {
@@ -316,7 +317,7 @@ flower.addEventListener('click', () => {
 
   window.setTimeout(() => {
     flower.style.display = 'none';
-    semilla.classList.add('visible');
+    mostrarSemilla();
   }, 1500);
 });
 
@@ -333,12 +334,12 @@ florContenedor.addEventListener('click', () => {
 
   window.setTimeout(() => {
     florContenedor.style.display = 'none';
-    semilla.classList.add('visible');
+    mostrarSemilla();
   }, 1500);
 });
 
 // La semilla cae al suelo, hace crecer el árbol y luego genera la copa en forma de corazón.
-semilla.addEventListener('click', () => {
+function iniciarCaidaSemilla() {
   if (!semilla.classList.contains('visible') || semilla.classList.contains('caer')) {
     return;
   }
@@ -375,6 +376,17 @@ semilla.addEventListener('click', () => {
       }, 1200);
     }, 1200);
   }, 2500);
+}
+
+function mostrarSemilla() {
+  semilla.classList.add('visible');
+  window.setTimeout(() => {
+    iniciarCaidaSemilla();
+  }, 2000);
+}
+
+semilla.addEventListener('click', () => {
+  iniciarCaidaSemilla();
 });
 
 // Eventos finales de la interfaz ya se gestionan arriba con las constantes globales.
