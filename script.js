@@ -10,19 +10,133 @@ const lineaSuelo = document.querySelector('.linea-suelo');
 const tallo = document.getElementById('tallo-principal');
 const ramas = document.querySelectorAll('.rama-secundaria');
 const hojas = document.querySelectorAll('.hoja-brote');
+const loveMessage = document.querySelector('.love-message');
+const celebrationMessage = document.querySelector('.celebration-message');
+let heartGenerationTimer = null;
+
+function createPasswordModal() {
+  const modal = document.createElement('div');
+  modal.className = 'password-modal hidden';
+  modal.setAttribute('aria-hidden', 'true');
+
+  modal.innerHTML = `
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" type="button" aria-label="Cerrar">×</button>
+      <p class="modal-kicker">Un pequeño secreto</p>
+      <h2 id="modal-title" class="modal-title">Introduce la contraseña</h2>
+      <p class="modal-text">Solo quien conoce el corazón puede entrar.</p>
+
+      <form class="password-form">
+        <label class="sr-only" for="secret-password">Contraseña</label>
+        <input id="secret-password" class="password-input" type="password" placeholder="Introduce una fecha especial" autocomplete="off" />
+        <button class="password-button" type="submit">Entrar</button>
+      </form>
+
+      <p class="modal-error" aria-live="polite"></p>
+    </div>
+  `;
+
+  const input = modal.querySelector('.password-input');
+  const form = modal.querySelector('.password-form');
+  const errorText = modal.querySelector('.modal-error');
+  const closeButton = modal.querySelector('.modal-close');
+  const title = modal.querySelector('.modal-title');
+  const text = modal.querySelector('.modal-text');
+
+  const openModal = () => {
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    input.focus();
+  };
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    errorText.textContent = '';
+    input.value = '';
+  };
+
+  const showSuccess = () => {
+    title.textContent = 'Correcto! 💖';
+    text.textContent = 'Enhorabuena, ahora tienes las llaves de mi corazón 🔑';
+    form.remove();
+    closeButton.textContent = '×';
+    closeButton.setAttribute('aria-label', 'Cerrar');
+    closeButton.style.marginBottom = '0';
+  };
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = input.value.trim();
+
+    if (value === '160826') {
+      showSuccess();
+      return;
+    }
+
+    errorText.textContent = 'Contraseña incorrecta. Inténtalo otra vez.';
+    input.value = '';
+    input.focus();
+  });
+
+  closeButton.addEventListener('click', closeModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.body.appendChild(modal);
+
+  return { openModal, closeModal };
+}
+
+const passwordModal = createPasswordModal();
+
+if (loveMessage) {
+  const heart = loveMessage.querySelector('.heart-emoji');
+
+  loveMessage.addEventListener('click', () => {
+    document.body.classList.toggle('theme-purple');
+
+    if (heart) {
+      heart.style.color = document.body.classList.contains('theme-purple') ? '#7d4ed1' : '#d7a200';
+    }
+
+    refreshHeartTheme();
+  });
+}
+
+if (celebrationMessage) {
+  celebrationMessage.addEventListener('click', () => {
+    passwordModal.openModal();
+  });
+}
 
 // Inicialización del dibujo del árbol: se calcula la longitud de cada trazo para animarlo con stroke-dashoffset.
 if (tallo) {
+  tallo.style.transition = 'none';
   const longitudTallo = tallo.getTotalLength();
   tallo.style.strokeDasharray = longitudTallo;
   tallo.style.strokeDashoffset = longitudTallo;
 }
 
 ramas.forEach((rama) => {
+  rama.style.transition = 'none';
   const longitudRama = rama.getTotalLength();
   rama.style.strokeDasharray = longitudRama;
   rama.style.strokeDashoffset = longitudRama;
 });
+
+window.setTimeout(() => {
+  if (tallo) {
+    tallo.style.transition = 'stroke-dashoffset 2.5s cubic-bezier(0.4, 0, 0.2, 1)';
+  }
+
+  ramas.forEach((rama) => {
+    rama.style.transition = 'stroke-dashoffset 1.5s ease-out';
+  });
+}, 50);
 
 hojas.forEach((hoja) => {
   hoja.classList.remove('visible');
@@ -60,17 +174,23 @@ generatePetalRain();
 // Genera la copa del corazón con muchas flores distribuidas por la forma del contorno y el interior del corazón.
 function generarCopaCorazon() {
   const copaCorazon = document.getElementById('copa-corazon');
-  if (!copaCorazon || copaCorazon.dataset.yaGenerado === 'true') {
+  if (!copaCorazon) {
     return;
   }
 
+  if (heartGenerationTimer) {
+    window.clearInterval(heartGenerationTimer);
+    heartGenerationTimer = null;
+  }
+
   copaCorazon.dataset.yaGenerado = 'true';
-  copaCorazon.setAttribute('transform', 'translate(0 30)');
+  copaCorazon.setAttribute('transform', 'translate(0 60)');
   copaCorazon.innerHTML = '';
 
   const totalFlores = 500;
   const puntos = [];
   const candidatos = [];
+  const flowerAsset = getHeartFlowerAsset();
 
   // Rejilla inteligente dentro de la forma del corazón para rellenar huecos y mantener la silueta clara.
   for (let y = 26; y <= 256; y += 9) {
@@ -145,12 +265,11 @@ function generarCopaCorazon() {
 
   // Inserta cada flor dentro del SVG con una aparición progresiva.
   let index = 0;
-  const intervalo = window.setInterval(() => {
+  heartGenerationTimer = window.setInterval(() => {
     if (index >= puntos.length) {
-      window.clearInterval(intervalo);
+      window.clearInterval(heartGenerationTimer);
+      heartGenerationTimer = null;
 
-      // Cuando termina la copa, se muestran los mensajes finales.
-      const loveMessage = document.querySelector('.love-message');
       const celebrationMessage = document.querySelector('.celebration-message');
       if (loveMessage) {
         loveMessage.classList.add('visible');
@@ -163,12 +282,12 @@ function generarCopaCorazon() {
 
     const punto = puntos[index];
     const flor = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    flor.setAttribute('href', 'flor.svg');
+    flor.setAttribute('href', flowerAsset);
     flor.setAttribute('class', 'flor-corazon');
     flor.setAttribute('x', String(punto.x - 12));
     flor.setAttribute('y', String(punto.y - 12));
-    flor.setAttribute('width', '24');
-    flor.setAttribute('height', '24');
+    flor.setAttribute('width', '33');
+    flor.setAttribute('height', '33');
     flor.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     flor.setAttribute('transform', `scale(${punto.escala})`);
 
@@ -257,3 +376,24 @@ semilla.addEventListener('click', () => {
     }, 1200);
   }, 2500);
 });
+
+// Eventos finales de la interfaz ya se gestionan arriba con las constantes globales.
+
+function getHeartFlowerAsset() {
+  return document.body.classList.contains('theme-purple') ? 'flor-morada.svg' : 'flor.svg';
+}
+
+function refreshHeartTheme() {
+  const copaCorazon = document.getElementById('copa-corazon');
+  if (!copaCorazon || !copaCorazon.children.length) {
+    return;
+  }
+
+  if (heartGenerationTimer) {
+    window.clearInterval(heartGenerationTimer);
+    heartGenerationTimer = null;
+  }
+
+  copaCorazon.innerHTML = '';
+  generarCopaCorazon();
+}

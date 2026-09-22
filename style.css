@@ -6,6 +6,10 @@
   --petal-3: #e0a726;
   --olive-soft: #4a7c59;
   --brown-soft: #5a4033;
+  --heart-color: #d7a200;
+  --panel-bg: rgba(255, 255, 255, 0.42);
+  --panel-border: rgba(74, 124, 89, 0.16);
+  --panel-accent: rgba(248, 223, 116, 0.18);
 }
 
 * {
@@ -217,11 +221,11 @@ body {
 .linea-suelo {
   position: absolute;
   left: 50%;
-  bottom: 80px;
+  bottom: 32px;
   width: 0;
-  height: 8px;
+  height: 7px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(76, 122, 77, 0.9), rgba(94, 67, 36, 0.9), rgba(76, 122, 77, 0.9));
+  background: linear-gradient(90deg, rgba(76, 122, 77, 0.95), rgba(94, 67, 36, 0.92), rgba(76, 122, 77, 0.95));
   transform: translateX(-50%);
   transition: width 2.5s ease-out;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -248,6 +252,8 @@ body {
   stroke-width: 9px;
   fill: none;
   stroke-linecap: round;
+  stroke-dasharray: 9999;
+  stroke-dashoffset: 9999;
   transition: stroke-dashoffset 2.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -256,6 +262,8 @@ body {
   stroke-width: 5px;
   fill: none;
   stroke-linecap: round;
+  stroke-dasharray: 9999;
+  stroke-dashoffset: 9999;
   transition: stroke-dashoffset 1.5s ease-out;
 }
 
@@ -264,6 +272,8 @@ body {
   stroke-width: 3px;
   fill: none;
   stroke-linecap: round;
+  stroke-dasharray: 9999;
+  stroke-dashoffset: 9999;
   transition: stroke-dashoffset 1.1s ease-out;
 }
 
@@ -320,11 +330,13 @@ body {
   position: absolute;
   top: clamp(24px, 5vh, 56px);
   left: clamp(18px, 3vw, 42px);
+  display: inline-block;
+  width: fit-content;
   max-width: min(36vw, 420px);
-  padding: 0.8rem 1.2rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.38);
-  border: 1px solid rgba(74, 124, 89, 0.12);
+  padding: 0.9rem 1.3rem;
+  border-radius: 26px 30px 24px 28px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(74, 124, 89, 0.16);
   backdrop-filter: blur(2px);
   color: #4a7c59;
   font-family: "Caveat", cursive;
@@ -338,13 +350,18 @@ body {
   transform: translateY(-14px) translateX(-8px) scale(0.96);
   transition: opacity 0.9s ease, transform 0.9s ease;
   z-index: 3;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .love-message.visible {
   opacity: 1;
   transform: translateY(0) translateX(0) scale(1);
   animation: messageFloat 3.8s ease-in-out infinite;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 @keyframes messageFloat {
@@ -361,9 +378,11 @@ body {
   position: absolute;
   right: clamp(18px, 3vw, 42px);
   bottom: clamp(48px, 9vh, 90px);
+  display: inline-block;
+  width: fit-content;
   max-width: min(30vw, 320px);
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  border-radius: 24px 28px 26px 22px;
   background: rgba(248, 223, 116, 0.18);
   border: 1px solid rgba(227, 182, 43, 0.18);
   color: #b7821d;
@@ -379,6 +398,9 @@ body {
   transition: opacity 0.9s ease, transform 0.9s ease;
   z-index: 3;
   pointer-events: none;
+  cursor: default;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .love-message.visible + .celebration-message,
@@ -386,6 +408,8 @@ body {
   opacity: 1;
   transform: translateY(0) translateX(0);
   animation: celebrationFloat 3.8s ease-in-out infinite 0.5s;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 @keyframes celebrationFloat {
@@ -396,4 +420,464 @@ body {
   50% {
     transform: translateY(-4px);
   }
+}
+
+@media (max-width: 900px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top, rgba(247, 221, 126, 0.22), transparent 34%),
+      linear-gradient(180deg, #fffdf8 0%, #fcfbf7 100%);
+  }
+
+  .love-message {
+    left: 16px;
+    top: 18px;
+    max-width: min(52vw, 300px);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    padding: 0.8rem 1rem;
+    border-radius: 22px 26px 20px 24px;
+    background: rgba(255, 255, 255, 0.56);
+    border-color: rgba(74, 124, 89, 0.16);
+    box-shadow: 0 10px 24px rgba(127, 97, 52, 0.09);
+  }
+
+  .celebration-message {
+    right: 16px;
+    bottom: 26px;
+    max-width: min(52vw, 280px);
+    font-size: clamp(1.3rem, 3.2vw, 2rem);
+    padding: 0.7rem 0.9rem;
+    border-radius: 20px 24px 22px 18px;
+    background: rgba(248, 223, 116, 0.16);
+  }
+
+  #contenedor-arbol {
+    width: min(92vw, 380px);
+    height: 72vh;
+    bottom: 60px;
+  }
+
+  .linea-suelo.expandir-suelo {
+    width: min(88vw, 500px);
+  }
+}
+
+@media (max-width: 640px) {
+  html,
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top, rgba(247, 221, 126, 0.25), transparent 28%),
+      radial-gradient(circle at bottom, rgba(116, 170, 118, 0.08), transparent 30%),
+      linear-gradient(180deg, #fffdf8 0%, #fcfbf7 100%);
+  }
+
+  .flower-wrapper {
+    top: 46%;
+    transform: translate(-50%, -50%);
+    gap: 6px;
+  }
+
+  .mensaje-indicador {
+    gap: 4px;
+  }
+
+  .hint {
+    margin: 0;
+    font-size: clamp(1.35rem, 7vw, 2.1rem);
+    max-width: min(72vw, 260px);
+    line-height: 1.08;
+    color: #5f7c55;
+    text-shadow: 0 3px 10px rgba(74, 124, 89, 0.12);
+  }
+
+  .arrow {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 6px;
+  }
+
+  .flower-container,
+  .flor-contenedor,
+  .flower {
+    width: 98px;
+    height: 98px;
+  }
+
+  .love-message {
+    left: 12px;
+    top: 12px;
+    max-width: calc(100vw - 24px);
+    width: fit-content;
+    padding: 0.75rem 1rem;
+    border-radius: 22px 28px 20px 24px;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(74, 124, 89, 0.14);
+    box-shadow: 0 12px 26px rgba(127, 97, 52, 0.1);
+    font-size: clamp(1.5rem, 7vw, 2.3rem);
+    letter-spacing: 0.03em;
+  }
+
+  .celebration-message {
+    left: 12px;
+    right: 12px;
+    bottom: 18px;
+    max-width: calc(100vw - 24px);
+    width: auto;
+    padding: 0.7rem 0.95rem;
+    text-align: center;
+    font-size: clamp(1.2rem, 6vw, 1.9rem);
+    border-radius: 24px 20px 26px 18px;
+    background: rgba(255, 246, 206, 0.8);
+    border-color: rgba(196, 143, 26, 0.22);
+    box-shadow: 0 10px 22px rgba(127, 97, 52, 0.09);
+  }
+
+  #contenedor-arbol {
+    width: min(96vw, 320px);
+    height: 64vh;
+    bottom: 52px;
+    opacity: 0.98;
+  }
+
+  .linea-suelo {
+    bottom: 60px;
+    height: 7px;
+    background: linear-gradient(90deg, rgba(76, 122, 77, 0.95), rgba(94, 67, 36, 0.92), rgba(76, 122, 77, 0.95));
+  }
+
+  .linea-suelo.expandir-suelo {
+    width: min(90vw, 420px);
+  }
+}
+
+@media (max-width: 430px) {
+  html,
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: block;
+    background:
+      radial-gradient(circle at top, rgba(247, 221, 126, 0.28), transparent 30%),
+      radial-gradient(circle at bottom, rgba(116, 170, 118, 0.12), transparent 30%),
+      linear-gradient(180deg, #fffdf8 0%, #fcfbf7 100%);
+  }
+
+  .flower-wrapper {
+    top: 48%;
+    transform: translate(-50%, -50%);
+  }
+
+  .hint {
+    font-size: clamp(1.35rem, 7vw, 2rem);
+    max-width: min(72vw, 240px);
+    letter-spacing: 0.02em;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 8px;
+  }
+
+  .love-message {
+    left: 12px;
+    top: 12px;
+    max-width: 220px;
+    width: fit-content;
+    padding: 0.7rem 0.95rem;
+    border-radius: 22px 26px 20px 24px;
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+    box-shadow: 0 12px 26px rgba(127, 97, 52, 0.1);
+  }
+
+  .celebration-message {
+    right: 12px;
+    bottom: 18px;
+    left: auto;
+    max-width: 240px;
+    width: auto;
+    padding: 0.7rem 0.9rem;
+    font-size: clamp(1.2rem, 5.8vw, 1.8rem);
+    border-radius: 22px 18px 24px 20px;
+    text-align: center;
+  }
+
+  #contenedor-arbol {
+    width: min(92vw, 300px);
+    height: 62vh;
+    max-height: 520px;
+    bottom: 58px;
+  }
+
+  .linea-suelo {
+    bottom: 60px;
+    width: 0;
+    height: 7px;
+  }
+
+  .linea-suelo.expandir-suelo {
+    width: min(88vw, 320px);
+  }
+}
+
+.password-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(34, 26, 18, 0.18);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.password-modal.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-card {
+  position: relative;
+  width: min(88vw, 380px);
+  padding: 1.5rem 1.4rem 1.2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(74, 124, 89, 0.14);
+  box-shadow: 0 18px 40px rgba(76, 58, 38, 0.14);
+  backdrop-filter: blur(6px);
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(74, 124, 89, 0.08);
+  color: var(--olive-soft);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-kicker {
+  margin: 0 0 0.4rem;
+  color: #b7821d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.modal-title {
+  margin: 0;
+  color: var(--olive-soft);
+  font-family: "Caveat", cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+}
+
+.modal-text {
+  margin: 0.5rem 0 1rem;
+  color: rgba(90, 64, 51, 0.82);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.password-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(74, 124, 89, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--brown-soft);
+  font-size: 1rem;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(74, 124, 89, 0.04);
+}
+
+.password-input:focus {
+  border-color: rgba(227, 182, 43, 0.45);
+  box-shadow: 0 0 0 4px rgba(248, 223, 116, 0.2);
+}
+
+.password-button {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5d96d 0%, #e0a726 100%);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(224, 167, 38, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.password-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(224, 167, 38, 0.3);
+}
+
+.modal-error {
+  min-height: 1.2rem;
+  margin: 0.35rem 0 0;
+  color: #b45353;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 480px) {
+  .password-modal {
+    align-items: center;
+    justify-items: center;
+    padding: 12px;
+    background: rgba(34, 26, 18, 0.28);
+  }
+
+  .modal-card {
+    width: min(92vw, 340px);
+    padding: 1.2rem 1rem 1rem;
+    border-radius: 24px;
+    box-shadow: 0 16px 28px rgba(76, 58, 38, 0.16);
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    font-size: 1.3rem;
+    line-height: 1;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: rgba(74, 124, 89, 0.08);
+  }
+
+  .modal-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
+
+  .modal-title {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .modal-text {
+    margin: 0.45rem 0 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .password-form {
+    gap: 0.7rem;
+  }
+
+  .password-input {
+    padding: 0.85rem 0.9rem;
+    border-radius: 14px;
+    font-size: 1rem;
+  }
+
+  .password-button {
+    padding: 0.85rem 1rem;
+    font-size: 0.98rem;
+  }
+
+  .modal-error {
+    min-height: 1.1rem;
+    font-size: 0.82rem;
+  }
+}
+
+body.theme-purple {
+  --cream: #f4eefc;
+  --petal-1: #d9b6ff;
+  --petal-2: #b68af6;
+  --petal-3: #8a5bd8;
+  --olive-soft: #5e3f7e;
+  --brown-soft: #382050;
+  --heart-color: #7d4ed1;
+  --panel-bg: rgba(255, 255, 255, 0.46);
+  --panel-border: rgba(122, 82, 167, 0.18);
+  --panel-accent: rgba(171, 133, 232, 0.18);
+  background: linear-gradient(180deg, #f4eefc 0%, #efe7ff 100%);
+}
+
+body.theme-purple .petals-layer {
+  background: linear-gradient(180deg, #f4eefc 0%, #efe7ff 100%);
+}
+
+body.theme-purple .love-message {
+  background: var(--panel-bg);
+  border-color: var(--panel-border);
+  color: #5f3d8e;
+  box-shadow: 0 12px 28px rgba(111, 83, 169, 0.12);
+}
+
+body.theme-purple .celebration-message {
+  background: var(--panel-accent);
+  border-color: rgba(122, 82, 167, 0.2);
+  color: #7047ac;
+  box-shadow: 0 10px 22px rgba(111, 83, 169, 0.08);
+}
+
+body.theme-purple .hint {
+  color: #694a8a;
+  text-shadow: 0 2px 10px rgba(106, 79, 162, 0.1);
+}
+
+body.theme-purple .linea-suelo {
+  background: linear-gradient(90deg, rgba(76, 122, 77, 0.95), rgba(94, 67, 36, 0.92), rgba(76, 122, 77, 0.95));
+}
+
+.heart-emoji {
+  color: var(--heart-color);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1.02em;
+  line-height: 1;
+  transform: translateY(-1px);
 }
