@@ -10,28 +10,29 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Capa de petalos que cae en el fondo para dar sensación de lluvia suave -->
+    <!-- Capa de pétalos que cae en el fondo para dar sensación de lluvia suave -->
     <div class="petals-layer" id="petalsLayer" aria-hidden="true"></div>
 
-    <div class="love-message" aria-label="mensaje romántico">Te quiero <span class="heart-emoji">♥</span>.</div>
-    <div class="celebration-message" aria-label="mensaje de celebración">Para la chica con la sonrisa más bonita del mundo.</div>
+    <button class="love-message" type="button" aria-label="Cambiar el tema de color">Te quiero <span class="heart-emoji" aria-hidden="true">♥</span>.</button>
+    <button class="celebration-message" type="button" aria-label="Abrir el mensaje secreto">Para la chica con la sonrisa más bonita del mundo.</button>
 
     <!-- Escena principal de la flor inicial y la guía de interacción -->
     <div class="flower-wrapper" aria-label="Flor amarilla con indicación">
       <div class="mensaje-indicador">
-        <p class="hint">Para Rachel, haz clic aquí ✨</p>
+        <p class="hint">Para Rachel, toca la flor y deja que florezca la magia ✨</p>
         <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" role="img">
           <path d="M12 3 L12 18 M5 11 L12 18 L19 11" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         </svg>
       </div>
 
-      <div class="flower-container" aria-label="Flor amarilla">
-        <div class="flor-contenedor">
-          <img class="flower" src="flor.svg" alt="Flor amarilla" />
-        </div>
-        <div class="semilla" aria-hidden="true"></div>
+      <div class="flower-container">
+        <button class="flor-contenedor" type="button" aria-label="Hacer florecer una flor amarilla">
+          <img class="flower" src="flor.svg" alt="" />
+        </button>
       </div>
     </div>
+
+    <div class="semilla" aria-hidden="true"></div>
 
     <!-- Árbol generado con SVG: tallo, ramas, hojas y copa en forma de corazón -->
     <svg id="contenedor-arbol" viewBox="0 0 400 900">

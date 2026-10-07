@@ -3,7 +3,6 @@ const petalsLayer = document.getElementById('petalsLayer');
 const hint = document.querySelector('.hint');
 const arrow = document.querySelector('.arrow');
 const mensajeIndicador = document.querySelector('.mensaje-indicador');
-const flower = document.querySelector('.flower');
 const florContenedor = document.querySelector('.flor-contenedor');
 const semilla = document.querySelector('.semilla');
 const lineaSuelo = document.querySelector('.linea-suelo');
@@ -13,6 +12,11 @@ const hojas = document.querySelectorAll('.hoja-brote');
 const loveMessage = document.querySelector('.love-message');
 const celebrationMessage = document.querySelector('.celebration-message');
 let heartGenerationTimer = null;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function motionDelay(duration) {
+  return prefersReducedMotion ? 0 : duration;
+}
 
 function createPasswordModal() {
   const modal = document.createElement('div');
@@ -157,6 +161,7 @@ function createPetal() {
   petal.style.height = `${size * 1.45}px`;
   petal.style.left = `${left}vw`;
   petal.style.animationDuration = `${duration}s`;
+  petal.style.animationDelay = `${-Math.random() * duration}s`;
   petal.style.setProperty('--sway', `${sway}px`);
 
   petalsLayer.appendChild(petal);
@@ -164,13 +169,15 @@ function createPetal() {
 
 // Genera la lluvia de pétalos inicial para ambientar la escena.
 function generatePetalRain() {
-  const totalPetals = 24;
+  const totalPetals = window.matchMedia('(max-width: 640px)').matches ? 9 : 15;
   for (let i = 0; i < totalPetals; i += 1) {
     createPetal();
   }
 }
 
-generatePetalRain();
+if (!prefersReducedMotion) {
+  generatePetalRain();
+}
 
 // Genera la copa del corazón con muchas flores distribuidas por la forma del contorno y el interior del corazón.
 function generarCopaCorazon() {
@@ -264,6 +271,30 @@ function generarCopaCorazon() {
     }
   }
 
+  const revealFlower = (punto) => {
+    const flor = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    flor.setAttribute('href', flowerAsset);
+    flor.setAttribute('class', 'flor-corazon');
+    flor.setAttribute('x', String(punto.x - 12));
+    flor.setAttribute('y', String(punto.y - 12));
+    flor.setAttribute('width', '33');
+    flor.setAttribute('height', '33');
+    flor.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    flor.setAttribute('transform', `scale(${punto.escala})`);
+    copaCorazon.appendChild(flor);
+
+    window.setTimeout(() => {
+      flor.classList.add('flor-visible');
+    }, motionDelay(10));
+  };
+
+  if (prefersReducedMotion) {
+    puntos.forEach(revealFlower);
+    loveMessage?.classList.add('visible');
+    celebrationMessage?.classList.add('visible');
+    return;
+  }
+
   // Inserta cada flor dentro del SVG con una aparición progresiva.
   let index = 0;
   heartGenerationTimer = window.setInterval(() => {
@@ -281,47 +312,12 @@ function generarCopaCorazon() {
       return;
     }
 
-    const punto = puntos[index];
-    const flor = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    flor.setAttribute('href', flowerAsset);
-    flor.setAttribute('class', 'flor-corazon');
-    flor.setAttribute('x', String(punto.x - 12));
-    flor.setAttribute('y', String(punto.y - 12));
-    flor.setAttribute('width', '33');
-    flor.setAttribute('height', '33');
-    flor.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    flor.setAttribute('transform', `scale(${punto.escala})`);
-
-    copaCorazon.appendChild(flor);
-
-    window.setTimeout(() => {
-      flor.classList.add('flor-visible');
-    }, 10);
-
+    revealFlower(puntos[index]);
     index += 1;
   }, 16);
 }
 
-// Cuando el usuario hace clic en la flor inicial, se encoge y aparece la semilla.
-flower.addEventListener('click', () => {
-  if (hint.classList.contains('is-hidden')) {
-    return;
-  }
-
-  mensajeIndicador.classList.add('ocultar');
-  hint.classList.add('is-hidden');
-
-  flower.style.transition = 'transform 1.5s cubic-bezier(0.18, 0.89, 0.32, 1.1)';
-  flower.style.transform = 'scale(0)';
-  flower.style.transformOrigin = 'center';
-
-  window.setTimeout(() => {
-    flower.style.display = 'none';
-    mostrarSemilla();
-  }, 1500);
-});
-
-// Mismo efecto si el usuario hace clic sobre el contenedor de la flor.
+// Al activar la flor, se encoge y aparece la semilla.
 florContenedor.addEventListener('click', () => {
   if (florContenedor.classList.contains('encoger')) {
     return;
@@ -333,9 +329,9 @@ florContenedor.addEventListener('click', () => {
   florContenedor.classList.add('encoger');
 
   window.setTimeout(() => {
-    florContenedor.style.display = 'none';
+    florContenedor.hidden = true;
     mostrarSemilla();
-  }, 1500);
+  }, motionDelay(1500));
 });
 
 // La semilla cae al suelo, hace crecer el árbol y luego genera la copa en forma de corazón.
@@ -373,16 +369,16 @@ function iniciarCaidaSemilla() {
         window.setTimeout(() => {
           generarCopaCorazon();
         }, 1200);
-      }, 1200);
-    }, 1200);
-  }, 2500);
+      }, motionDelay(1200));
+    }, motionDelay(1200));
+  }, motionDelay(3200));
 }
 
 function mostrarSemilla() {
   semilla.classList.add('visible');
   window.setTimeout(() => {
     iniciarCaidaSemilla();
-  }, 2000);
+  }, motionDelay(2000));
 }
 
 semilla.addEventListener('click', () => {
